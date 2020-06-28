@@ -43,7 +43,7 @@ function App() {
 
   let displ =
     showDet && !isLoading ? (
-      <div>
+      <div className= 'results-div'>
         <div className='columns'>
           <div className='column'>
             <img src={image.smallThumbnail} alt='' />
@@ -115,7 +115,7 @@ function App() {
         <div>{showLoading}</div>
         {console.log(isError)}
         {/* {isError && <div>Something went wrong ...</div>} */}
-        <div className= 'results-div'>{displ}</div>
+        <div>{displ}</div>
       </div>
     </>
   );
