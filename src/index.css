@@ -15,6 +15,11 @@ body {
   display: block;
 }
 
+.results-div{
+  margin:1rem auto;
+ max-width:40rem;
+ line-height:2rem;
+}
 .not-loading {
   height: 100vh;
   display: flex;

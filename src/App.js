@@ -10,6 +10,8 @@ function App() {
   const [url, setUrl] = useState('');
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [image, setImage] = useState('');
+  const [authors, setAuthors] = useState('');
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
@@ -19,8 +21,9 @@ function App() {
         const results = await Axios(url);
 
         setBooks(results.data.items[0].volumeInfo);
-        // setBooks((books) => results.data);
-        console.log('results :', results.data);
+        setImage(results.data.items[0].volumeInfo.imageLinks);
+        setAuthors((results.data.items[0].volumeInfo.authors).join(', '));
+  
       } catch (e) {
         setIsError(true);
       }
@@ -38,37 +41,45 @@ function App() {
     </div>
   ) : null;
 
-  let displ = showDet ? (
-    <div>
-      <div className='columns'>
-        <div className='column'>Image</div>
-        <div className='column'>
-          <h2>
-            <span style={{ fontWeight: '600' }}>Title </span>: {books.title}
-          </h2>
-          <h3>
-            <span style={{ fontWeight: '600' }}>Subtitle:</span>{' '}
-            {books.subtitle}
-          </h3>
-          <h4>
-            <span style={{ fontWeight: '600' }}>Author:</span> {books.authors}
-          </h4>
-          <h4>
-            <span style={{ fontWeight: '600' }}>Published Date:</span>{' '}
-            {books.publishedDate}
-          </h4>
-          <h4>
-            <span style={{ fontWeight: '600' }}>Publisher: </span>
-            {books.publisher}
-          </h4>
-          <p>
-            <span style={{ fontWeight: '600' }}>Description:</span>{' '}
-            {books.description}
-          </p>
+  let displ =
+    showDet && !isLoading ? (
+      <div>
+        <div className='columns'>
+          <div className='column'>
+            <img src={image.smallThumbnail} alt='' />
+          </div>
+          <div className='column'>
+            <h2>
+              <span style={{ fontWeight: '600' }}>Title </span>: {books.title}
+            </h2>
+            {!books.subtitle ? (
+              ''
+            ) : (
+              <h3>
+                <span style={{ fontWeight: '600' }}>Subtitle:</span>{' '}
+                {books.subtitle}
+              </h3>
+            )}
+            <h4>
+              <span style={{ fontWeight: '600' }}>Author:</span>{' '}
+              { authors }
+            </h4>
+            <h4>
+              <span style={{ fontWeight: '600' }}>Published Date:</span>{' '}
+              {books.publishedDate}
+            </h4>
+            <h4>
+              <span style={{ fontWeight: '600' }}>Publisher: </span>
+              {books.publisher}
+            </h4>
+          </div>
         </div>
+        <p>
+          <span style={{ fontWeight: '600' }}>Description:</span>{' '}
+          {books.description}
+        </p>
       </div>
-    </div>
-  ) : null;
+    ) : null;
 
   let btnStyle = !showDet ? { margin: '1rem auto' } : { margin: '1rem 0rem' };
   return (
@@ -104,7 +115,7 @@ function App() {
         <div>{showLoading}</div>
         {console.log(isError)}
         {/* {isError && <div>Something went wrong ...</div>} */}
-        <div>{displ}</div>
+        <div className= 'results-div'>{displ}</div>
       </div>
     </>
   );
