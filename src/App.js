@@ -116,6 +116,7 @@ function App() {
         {console.log(isError)}
         {/* {isError && <div>Something went wrong ...</div>} */}
         <div>{displ}</div>
+        {console.log(process.env.REACT_APP_KEY)}
       </div>
     </>
   );
