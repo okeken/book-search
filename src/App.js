@@ -114,7 +114,6 @@ function App() {
         </form>
         <div>{showLoading}</div>
         {console.log(isError)}
-        {/* {isError && <div>Something went wrong ...</div>} */}
         <div>{displ}</div>
        
       </div>
