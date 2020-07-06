@@ -35,15 +35,16 @@ function App() {
       let results = await Axios(
         `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${process.env.REACT_APP_KEY}`
       );
+      setIsError(false)
       setresultShow(resultShow + 1)
       setData(results.data);
     } catch (e) {
-      setIsError(!isError)
-    //  setIsError(true)
+    
+      setIsError(true)
       console.log('error occurs', isError)
     }
     setIsLoading(false)
-    setIsError(false)
+ 
   };
 
   let showDet = resultShow >= 1;
@@ -99,12 +100,11 @@ function App() {
           }
 
 {
-        isError && (
+        isError & !isLoading && (
           <>
           <div className='error-div'>
           <h3 className='error-text'>
-          <span className='error-first-text'>o
-          </span>
+          <span className='error-first-text'>o</span>
           h no! Something went wrong, pls try again later.
           </h3>
           </div>
