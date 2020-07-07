@@ -150,6 +150,11 @@ button.btn {
   max-width: 10rem;
 }
 
+.test-css {
+  color: red !important;
+  font-size: 3rem !important;
+}
+
 .btn-results {
   margin-top: 1rem;
 }
