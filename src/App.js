@@ -24,33 +24,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [countMe, setCountMe] = useState(0);
-<<<<<<< HEAD
-  const [volumeId, setVolumeId] = useState('');
-  const [volumeData, setVolumeData] = useState({});
-  const [isLoadingB, setIsLoadingB] = useState(false);
-  const [id, setId] = useState('');
-
-  const [n, setN] = useState();
-  const [testState, setTestState] = useState(0);
-  let itemsId = [];
-
-  //testUrl = `https://www.googleapis.com/books/v1/volumes/${volumeID}?key=${process.env.REACT_APP_KEY}`
-
-  // useEffect(()=>{
-  //     let fetchVolumeInfo = async () => {
-  //   try {
-  //     let volResult = await Axios(volUrl);
-  //     setVolumeData(volResult.data);
-  //     console.log(volumeData.volumeInfo.averageRating);
-  //     console.log(volumeData.volumeInfo.ratingsCount);
-  //     console.log('vol id', volumeID);
-  //   } catch (e) {
-  //     console.log('error occured', e);
-  //   }
-  // };
-  // })
-=======
-  const [volumeID, setVolumeID] = useState('L4HOcQAACAAJ');
+  const [volumeId, setVolumeId] = useState('L4HOcQAACAAJ');
   const [volumeData, setVolumeData] = useState('');
   const [isLoadingB, setIsLoadingB] = useState(false);
 
@@ -58,21 +32,20 @@ function App() {
     setIsLoadingB(true);
     try {
       let volResult = await Axios(
-        `https://www.googleapis.com/books/v1/volumes/${volumeID}?key=${process.env.REACT_APP_KEY}`
+        `https://www.googleapis.com/books/v1/volumes/${volumeId}?key=${process.env.REACT_APP_KEY}`
       );
       setVolumeData(volResult.data);
       console.log('vol fetch', volumeData);
-      console.log('volume id :', volumeID);
+      console.log('volume id :', volumeId);
       console.log(
         'url: ',
-        `https://www.googleapis.com/books/v1/volumes/${volumeID}?key=${process.env.REACT_APP_KEY}`
+        `https://www.googleapis.com/books/v1/volumes/${volumeId}?key=${process.env.REACT_APP_KEY}`
       );
     } catch (e) {
       console.log('error occured', e);
     }
     setIsLoadingB(false);
   };
->>>>>>> parent of 517ce79... More Info Showing- Not complete yet
 
   let fetchData = async () => {
     setIsLoading(true);
@@ -89,9 +62,7 @@ function App() {
     }
     setIsLoading(false);
   };
-  let b;
 
-  console.log(volumeId);
   const [moreN, setMoreN] = useState(0);
   if (volumeId.length >= 2 && moreN === 1) {
     console.log('more N', moreN);
@@ -176,37 +147,6 @@ function App() {
             )}
           </form>
         </div>
-<<<<<<< HEAD
-        {arr.push({
-          id: data.items
-            .map((items) => items.id)
-            .join(',')
-            .split(','),
-          author: data.items
-            .map((items) => items.volumeInfo.authors)
-            .join(',')
-            .split(','),
-          image: data.items.map(
-            (items) => items.volumeInfo.imageLinks.thumbnail
-          ),
-
-          title: data.items
-            .map((items) => items.volumeInfo.title)
-            .join(',')
-            .split(','),
-          subtitle: data.items
-            .map((items) => items.volumeInfo.subtitle)
-            .join(',')
-            .split(','),
-          description: data.items.map((items) => items.volumeInfo.description),
-          category: data.items
-            .map((items) => items.volumeInfo.categories)
-            .join(',')
-            .split(','),
-        })}
-        {newArr.push(arr)}
-=======
->>>>>>> parent of 517ce79... More Info Showing- Not complete yet
         {!isError & !isLoading && (
           <>
             <div className='book-search-section'>
@@ -308,106 +248,20 @@ function App() {
                     </div>
 
                     <Button
-                      className={`${volumeID === items.id ? 'test-css' : null}`}
+                      className={`${volumeId === items.id ? 'test-css' : null}`}
                       type='submit'
                       color='primary is-light'
                       value={items.id}
                       onClick={(e) => {
-<<<<<<< HEAD
-                        let a = arr[0];
-                        let c = a.id.findIndex((i) => i === items.id);
-                        setN(c);
                         setVolumeId(e.target.value);
-                        console.log('value', e.target.value);
-                        setId(volumeId);
-                        console.log('vol building', volumeId);
-                        console.log('items id', id);
-                        itemsId.push(e.target.value);
-=======
-                        setVolumeID(e.target.value);
                         fetchVolumeInfo();
-                        console.log('body', volumeID);
->>>>>>> parent of 517ce79... More Info Showing- Not complete yet
+                        console.log('body', volumeId);
                       }}
                     >
                       {' '}
                       Get More Info
                     </Button>
                     <hr className='hr-book-results' />
-<<<<<<< HEAD
-
-                    {console.log('vol', volumeId)}
-                    <div className='more-info-div'>
-                      <div
-                        className={`modal ${
-                          volumeId === items.id ? 'is-active' : null
-                        }`}
-                      >
-                        {
-                          //  setVolUrl(
-                          //     `https://www.googleapis.com/books/v1/volumes/${volumeID}?key=${process.env.REACT_APP_KEY}`
-                          //   );
-                          //  fetchVolumeInfo();
-                        }
-                        <div className='modal-background'></div>
-                        <div className='modal-card'>
-                          <header className='modal-card-head'>
-                            <h2 className='modal-card-title'>
-                              <p>{arr[0].title[n]} </p>
-                            </h2>
-                            <button
-                              onClick={() => {
-                                setVolumeId('');
-                              }}
-                              className='delete'
-                              aria-label='close'
-                            ></button>
-                          </header>
-                          <section className='modal-card-body'>
-                            <div className='columns'>
-                              <div className='column image-div'>
-                                <img
-                                  src={arr[0].image[n]}
-                                  alt='selected-book'
-                                />
-                              </div>
-                              <div className='column more-info-sub'>
-                                <p className=''>{arr[0].author[n]} </p>
-                                <p className=''>{arr[0].subtitle[n]} </p>
-                                <p className=''>{arr[0].subtitle[n]} </p>
-
-                                <p className=''>
-                                  Category: {arr[0].category[n]}{' '}
-                                </p>
-                              </div>
-                            </div>
-
-                            <p className='book-full-desc'>
-                              {arr[0].description[n]}{' '}
-                            </p>
-                          </section>
-                          <footer className='modal-card-foot'>
-                            <button
-                              onClick={() => {
-                                setVolumeId('');
-                              }}
-                              className='button is-success'
-                            >
-                              <FontAwesomeIcon
-                                icon={faAngleDoubleLeft}
-                                className='icon'
-                              />
-                              <p>Back</p>
-                            </button>
-                            <button className='button isp-pulled-right'>
-                              Read Online
-                            </button>
-                          </footer>
-                        </div>
-                      </div>
-                    </div>
-=======
->>>>>>> parent of 517ce79... More Info Showing- Not complete yet
                   </div>
                 </>
               ))}
