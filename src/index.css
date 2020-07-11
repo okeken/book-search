@@ -173,3 +173,34 @@ button.btn {
   font-weight: 600;
   font-size: 1rem;
 }
+
+.ratings {
+  background: greenyellow;
+  padding: 0.1rem 0.25rem;
+  border-radius: 10px;
+}
+.price-not-avail {
+  margin-top: 0.7rem;
+  padding-left: 0.45rem;
+  padding-right: 0.45rem;
+  border-radius: 10px;
+  background: red;
+  color: white;
+  display: inline-block;
+}
+
+.country-not-available {
+  margin-top: 1rem;
+  color: #333;
+  font-weight: 600;
+  background: greenyellow;
+}
+
+.back {
+  color: whitesmoke;
+  font-size: 1.4rem;
+  margin-right: 0.7rem;
+}
+.more-info-sub {
+  line-height: 1.7rem;
+}

@@ -29,27 +29,30 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [countMe, setCountMe] = useState(0);
-  const [volumeId, setVolumeId] = useState('L4HOcQAACAAJ');
-  const [volumeData, setVolumeData] = useState({});
+  const [volumeId, setVolumeId] = useState('');
+  const [volumeData, setVolumeData] = useState({ volumeInfo: {} });
   const [isLoadingB, setIsLoadingB] = useState(false);
   const [n, setN] = useState();
   let arr = [];
 
   const [moreN, setMoreN] = useState(0);
-  console.log(moreN);
+  const [vol, setVol] = useState({});
+
+  // const [volumeData, setVolumeData] = useState({volumeInfo:{}})
+  const [access, setAccess] = useState({ accessInfo: {} });
+  const [price, setPrice] = useState({ retailPrice: {} });
+  const [othersVol, setOthersVol] = useState('');
+
   if (volumeId.length >= 2 && moreN === 1) {
-    console.log('more N', moreN);
     let fetchVol = async () => {
       try {
         let res = await Axios(
           `https://www.googleapis.com/books/v1/volumes/${volumeId}?key=${process.env.REACT_APP_KEY}`
         );
-        console.log('vol in if else statem', volumeId);
         setVolumeData(res.data);
-        console.log('new vol dat', volumeData);
-        console.log(volumeData.volumeInfo);
-        // console.log(volumeData.volumeInfo.averageRating);
-        //  console.log(volumeData.volumeInfo.ratingsCount);
+        setAccess(res.data);
+        setOthersVol(res.data);
+
         setMoreN(moreN + 1);
       } catch (e) {
         console.log('something happened', e);
@@ -69,12 +72,7 @@ function App() {
       setIsError(false);
       setresultShow(resultShow + 1);
       setData(results.data);
-      console.log(query);
     } catch (e) {
-      console.log(
-        `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${process.env.REACT_APP_KEY}`
-      );
-      console.log(query);
       setIsError(true);
       console.log('error occurs', isError);
     }
@@ -93,7 +91,7 @@ function App() {
   let btnStyle = !showDet ? { margin: '1rem auto' } : { margin: '1rem 0rem' };
   return (
     <>
-      <div className={resultShow == 0 ? 'dark-bg' : null}>
+      <div className={resultShow === 0 ? 'dark-bg' : null}>
         <div className={`my-form ${!showDet ? 'not-loading' : 'loaded-res'}`}>
           <form
             onSubmit={(e) => {
@@ -278,11 +276,8 @@ function App() {
                         let c = a.id.findIndex((i) => i === items.id);
                         setN(c);
                         setVolumeId(e.target.value);
-                        console.log('value', e.target.value);
-                        //  setId(volumeId);
-                        console.log('vol building', volumeId);
-                        //   console.log('items id', id);
-                        // itemsId.push(e.target.value);
+
+                        setMoreN(moreN + 1);
                       }}
                     >
                       {' '}
@@ -290,32 +285,18 @@ function App() {
                     </Button>
                     <hr className='hr-book-results' />
 
-                    {console.log('vol', volumeId)}
                     <div className='more-info-div'>
                       <div
                         className={`modal ${
                           volumeId === items.id ? 'is-active' : null
                         }`}
                       >
-                        {
-                          //  setVolUrl(
-                          //     `https://www.googleapis.com/books/v1/volumes/${volumeID}?key=${process.env.REACT_APP_KEY}`
-                          //   );
-                          //  fetchVolumeInfo();
-                        }
                         <div className='modal-background'></div>
                         <div className='modal-card'>
                           <header className='modal-card-head'>
                             <h2 className='modal-card-title'>
                               <p>{arr[0].title[n]} </p>
                             </h2>
-                            <button
-                              onClick={() => {
-                                setVolumeId('');
-                              }}
-                              className='delete'
-                              aria-label='close'
-                            ></button>
                           </header>
                           <section className='modal-card-body'>
                             <div className='columns'>
@@ -328,34 +309,77 @@ function App() {
                               <div className='column more-info-sub'>
                                 <p className=''>{arr[0].author[n]} </p>
                                 <p className=''>{arr[0].subtitle[n]} </p>
-                                <p className=''>{arr[0].subtitle[n]} </p>
 
                                 <p className=''>
                                   Category: {arr[0].category[n]}{' '}
                                 </p>
+                                <p className=''>
+                                  {volumeData.volumeInfo.ratingsCount >= 1 && (
+                                    <>
+                                      <span className='ratings'>
+                                        {volumeData.volumeInfo.averageRating}
+                                      </span>{' '}
+                                      from{' '}
+                                      <span className='ratings'>
+                                        {volumeData.volumeInfo.ratingsCount}
+                                      </span>{' '}
+                                      ratings
+                                    </>
+                                  )}
+                                </p>
+
+                                {price.retailPrice.length === undefined ? (
+                                  <>
+                                    <p className='price-not-avail'>
+                                      Price not available
+                                    </p>
+                                  </>
+                                ) : (
+                                  <>Price: ${price.retailPrice.currencyCode}</>
+                                )}
                               </div>
                             </div>
 
                             <p className='book-full-desc'>
                               {arr[0].description[n]}{' '}
                             </p>
+                            {price.retailPrice.length === undefined ? (
+                              <>
+                                <p className='price-not-avail country-not-available'>
+                                  Not Available for Sale in your Country
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <button className='primary'>
+                                  <a href={othersVol.buyLink}>Buy Now</a>
+                                </button>
+                              </>
+                            )}
                           </section>
                           <footer className='modal-card-foot'>
                             <button
                               onClick={() => {
                                 setVolumeId('');
+                                setMoreN(0);
                               }}
                               className='button is-success'
                             >
                               <FontAwesomeIcon
                                 icon={faAngleDoubleLeft}
-                                className='icon'
+                                className='back'
                               />
                               <p>Back</p>
                             </button>
-                            <button className='button isp-pulled-right'>
-                              Read Online
-                            </button>
+                            {access.accessInfo.webReaderLink && (
+                              <>
+                                <button className='button is-pulled-right'>
+                                  <a href={access.accessInfo.webReaderLink}>
+                                    Read Online
+                                  </a>
+                                </button>
+                              </>
+                            )}
                           </footer>
                         </div>
                       </div>
