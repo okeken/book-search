@@ -24,6 +24,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [countMe, setCountMe] = useState(0);
+<<<<<<< HEAD
   const [volumeId, setVolumeId] = useState('');
   const [volumeData, setVolumeData] = useState({});
   const [isLoadingB, setIsLoadingB] = useState(false);
@@ -48,6 +49,30 @@ function App() {
   //   }
   // };
   // })
+=======
+  const [volumeID, setVolumeID] = useState('L4HOcQAACAAJ');
+  const [volumeData, setVolumeData] = useState('');
+  const [isLoadingB, setIsLoadingB] = useState(false);
+
+  let fetchVolumeInfo = async () => {
+    setIsLoadingB(true);
+    try {
+      let volResult = await Axios(
+        `https://www.googleapis.com/books/v1/volumes/${volumeID}?key=${process.env.REACT_APP_KEY}`
+      );
+      setVolumeData(volResult.data);
+      console.log('vol fetch', volumeData);
+      console.log('volume id :', volumeID);
+      console.log(
+        'url: ',
+        `https://www.googleapis.com/books/v1/volumes/${volumeID}?key=${process.env.REACT_APP_KEY}`
+      );
+    } catch (e) {
+      console.log('error occured', e);
+    }
+    setIsLoadingB(false);
+  };
+>>>>>>> parent of 517ce79... More Info Showing- Not complete yet
 
   let fetchData = async () => {
     setIsLoading(true);
@@ -101,12 +126,9 @@ function App() {
   ) : null;
 
   let btnStyle = !showDet ? { margin: '1rem auto' } : { margin: '1rem 0rem' };
-  let arr = [];
-  let newArr = [];
-
   return (
     <>
-      <div className={resultShow === 0 ? 'dark-bg' : null}>
+      <div className={resultShow == 0 ? 'dark-bg' : null}>
         <div className={`my-form ${!showDet ? 'not-loading' : 'loaded-res'}`}>
           <form
             onSubmit={(e) => {
@@ -154,6 +176,7 @@ function App() {
             )}
           </form>
         </div>
+<<<<<<< HEAD
         {arr.push({
           id: data.items
             .map((items) => items.id)
@@ -182,6 +205,8 @@ function App() {
             .split(','),
         })}
         {newArr.push(arr)}
+=======
+>>>>>>> parent of 517ce79... More Info Showing- Not complete yet
         {!isError & !isLoading && (
           <>
             <div className='book-search-section'>
@@ -283,11 +308,12 @@ function App() {
                     </div>
 
                     <Button
-                      className='btn-results'
+                      className={`${volumeID === items.id ? 'test-css' : null}`}
                       type='submit'
                       color='primary is-light'
                       value={items.id}
                       onClick={(e) => {
+<<<<<<< HEAD
                         let a = arr[0];
                         let c = a.id.findIndex((i) => i === items.id);
                         setN(c);
@@ -297,12 +323,18 @@ function App() {
                         console.log('vol building', volumeId);
                         console.log('items id', id);
                         itemsId.push(e.target.value);
+=======
+                        setVolumeID(e.target.value);
+                        fetchVolumeInfo();
+                        console.log('body', volumeID);
+>>>>>>> parent of 517ce79... More Info Showing- Not complete yet
                       }}
                     >
                       {' '}
                       Get More Info
                     </Button>
                     <hr className='hr-book-results' />
+<<<<<<< HEAD
 
                     {console.log('vol', volumeId)}
                     <div className='more-info-div'>
@@ -374,6 +406,8 @@ function App() {
                         </div>
                       </div>
                     </div>
+=======
+>>>>>>> parent of 517ce79... More Info Showing- Not complete yet
                   </div>
                 </>
               ))}
