@@ -14,6 +14,7 @@ import {
   faUser,
   faBuilding,
   faTemperatureHigh,
+  faAngleDoubleLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import { faTwitter, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -28,23 +29,36 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [countMe, setCountMe] = useState(0);
-  const [volumeID, setVolumeID] = useState('L4HOcQAACAAJ');
+  const [volumeId, setVolumeId] = useState('L4HOcQAACAAJ');
   const [volumeData, setVolumeData] = useState({});
   const [isLoadingB, setIsLoadingB] = useState(false);
   const [n, setN] = useState();
+  let arr = [];
 
-  let fetchVolumeInfo = async () => {
-    setIsLoadingB(true);
-    try {
-      let volResult = await Axios(
-        `https://www.googleapis.com/books/v1/volumes/${volumeID}?key=${process.env.REACT_APP_KEY}`
-      );
-      setVolumeData(volResult.data);
-    } catch (e) {
-      console.log('error occured', e);
-    }
-    setIsLoadingB(false);
-  };
+  const [moreN, setMoreN] = useState(0);
+  console.log(moreN);
+  if (volumeId.length >= 2 && moreN === 1) {
+    console.log('more N', moreN);
+    let fetchVol = async () => {
+      try {
+        let res = await Axios(
+          `https://www.googleapis.com/books/v1/volumes/${volumeId}?key=${process.env.REACT_APP_KEY}`
+        );
+        console.log('vol in if else statem', volumeId);
+        setVolumeData(res.data);
+        console.log('new vol dat', volumeData);
+        console.log(volumeData.volumeInfo);
+        // console.log(volumeData.volumeInfo.averageRating);
+        //  console.log(volumeData.volumeInfo.ratingsCount);
+        setMoreN(moreN + 1);
+      } catch (e) {
+        console.log('something happened', e);
+      }
+    };
+    fetchVol();
+  } else {
+    console.log('watching');
+  }
 
   let fetchData = async () => {
     setIsLoading(true);
@@ -55,7 +69,12 @@ function App() {
       setIsError(false);
       setresultShow(resultShow + 1);
       setData(results.data);
+      console.log(query);
     } catch (e) {
+      console.log(
+        `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${process.env.REACT_APP_KEY}`
+      );
+      console.log(query);
       setIsError(true);
       console.log('error occurs', isError);
     }
@@ -131,18 +150,25 @@ function App() {
             .map((items) => items.volumeInfo.authors)
             .join(',')
             .split(','),
+          image: data.items.map(
+            (items) => items.volumeInfo.imageLinks.thumbnail
+          ),
+
           title: data.items
             .map((items) => items.volumeInfo.title)
             .join(',')
             .split(','),
+          subtitle: data.items
+            .map((items) => items.volumeInfo.subtitle)
+            .join(',')
+            .split(','),
           description: data.items.map((items) => items.volumeInfo.description),
-
           category: data.items
-            .map((items) => items.volumeInfo.title)
+            .map((items) => items.volumeInfo.categories)
             .join(',')
             .split(','),
         })}
-        {newArr.push(arr)}
+
         {!isError & !isLoading && (
           <>
             <div className='book-search-section'>
@@ -242,18 +268,21 @@ function App() {
                           : items.volumeInfo.description.slice(0, 200) + '...'}
                       </p>
                     </div>
-
                     <Button
-                      className={`${volumeId === items.id ? 'test-css' : null}`}
+                      className='btn-results'
                       type='submit'
                       color='primary is-light'
                       value={items.id}
                       onClick={(e) => {
-                        setVolumeID(e.target.value);
-                        fetchVolumeInfo();
                         let a = arr[0];
                         let c = a.id.findIndex((i) => i === items.id);
                         setN(c);
+                        setVolumeId(e.target.value);
+                        console.log('value', e.target.value);
+                        //  setId(volumeId);
+                        console.log('vol building', volumeId);
+                        //   console.log('items id', id);
+                        // itemsId.push(e.target.value);
                       }}
                     >
                       {' '}
@@ -261,34 +290,72 @@ function App() {
                     </Button>
                     <hr className='hr-book-results' />
 
+                    {console.log('vol', volumeId)}
                     <div className='more-info-div'>
                       <div
                         className={`modal ${
-                          volumeID === items.id ? 'is-active' : null
+                          volumeId === items.id ? 'is-active' : null
                         }`}
                       >
-                        <div class='modal-background'></div>
-                        <div class='modal-card'>
+                        {
+                          //  setVolUrl(
+                          //     `https://www.googleapis.com/books/v1/volumes/${volumeID}?key=${process.env.REACT_APP_KEY}`
+                          //   );
+                          //  fetchVolumeInfo();
+                        }
+                        <div className='modal-background'></div>
+                        <div className='modal-card'>
                           <header className='modal-card-head'>
-                            <p className='modal-card-title'>
+                            <h2 className='modal-card-title'>
                               <p>{arr[0].title[n]} </p>
-                            </p>
+                            </h2>
                             <button
                               onClick={() => {
-                                setVolumeID('');
+                                setVolumeId('');
                               }}
                               className='delete'
                               aria-label='close'
                             ></button>
                           </header>
                           <section className='modal-card-body'>
-                            <p>{arr[0].description[n]} </p>
+                            <div className='columns'>
+                              <div className='column image-div'>
+                                <img
+                                  src={arr[0].image[n]}
+                                  alt='selected-book'
+                                />
+                              </div>
+                              <div className='column more-info-sub'>
+                                <p className=''>{arr[0].author[n]} </p>
+                                <p className=''>{arr[0].subtitle[n]} </p>
+                                <p className=''>{arr[0].subtitle[n]} </p>
+
+                                <p className=''>
+                                  Category: {arr[0].category[n]}{' '}
+                                </p>
+                              </div>
+                            </div>
+
+                            <p className='book-full-desc'>
+                              {arr[0].description[n]}{' '}
+                            </p>
                           </section>
                           <footer className='modal-card-foot'>
-                            <button className='button is-success'>
-                              Save changes
+                            <button
+                              onClick={() => {
+                                setVolumeId('');
+                              }}
+                              className='button is-success'
+                            >
+                              <FontAwesomeIcon
+                                icon={faAngleDoubleLeft}
+                                className='icon'
+                              />
+                              <p>Back</p>
                             </button>
-                            <button className='button'>Cancel</button>
+                            <button className='button isp-pulled-right'>
+                              Read Online
+                            </button>
                           </footer>
                         </div>
                       </div>
