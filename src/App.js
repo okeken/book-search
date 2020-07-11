@@ -6,12 +6,14 @@ import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components';
 import {
   faHome,
+  faLanguage,
   faBook,
+  faAddressBook,
   faCalendar,
   faFile,
   faUser,
   faBuilding,
-  faAngleDoubleLeft,
+  faTemperatureHigh,
 } from '@fortawesome/free-solid-svg-icons';
 import { faTwitter, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,27 +22,24 @@ function App() {
   const [resultShow, setresultShow] = useState(0);
   const [data, setData] = useState({ items: [] });
   const [query, setQuery] = useState('');
-  //const [volUrl, setVolUrl] = useState('');
+  const [url, setUrl] = useState(
+    `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${process.env.REACT_APP_KEY}`
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [countMe, setCountMe] = useState(0);
-  const [volumeId, setVolumeId] = useState('L4HOcQAACAAJ');
-  const [volumeData, setVolumeData] = useState('');
+  const [volumeID, setVolumeID] = useState('L4HOcQAACAAJ');
+  const [volumeData, setVolumeData] = useState({});
   const [isLoadingB, setIsLoadingB] = useState(false);
+  const [n, setN] = useState();
 
   let fetchVolumeInfo = async () => {
     setIsLoadingB(true);
     try {
       let volResult = await Axios(
-        `https://www.googleapis.com/books/v1/volumes/${volumeId}?key=${process.env.REACT_APP_KEY}`
+        `https://www.googleapis.com/books/v1/volumes/${volumeID}?key=${process.env.REACT_APP_KEY}`
       );
       setVolumeData(volResult.data);
-      console.log('vol fetch', volumeData);
-      console.log('volume id :', volumeId);
-      console.log(
-        'url: ',
-        `https://www.googleapis.com/books/v1/volumes/${volumeId}?key=${process.env.REACT_APP_KEY}`
-      );
     } catch (e) {
       console.log('error occured', e);
     }
@@ -62,30 +61,6 @@ function App() {
     }
     setIsLoading(false);
   };
-
-  const [moreN, setMoreN] = useState(0);
-  if (volumeId.length >= 2 && moreN === 1) {
-    console.log('more N', moreN);
-    let fetchVol = async () => {
-      try {
-        let res = await Axios(
-          `https://www.googleapis.com/books/v1/volumes/${volumeId}?key=${process.env.REACT_APP_KEY}`
-        );
-        console.log('vol in if else statem', volumeId);
-        setVolumeData(res.data);
-        console.log('new vol dat', volumeData);
-        console.log(volumeData.volumeInfo);
-        // console.log(volumeData.volumeInfo.averageRating);
-        //  console.log(volumeData.volumeInfo.ratingsCount);
-        setMoreN(moreN + 1);
-      } catch (e) {
-        console.log('something happened', e);
-      }
-    };
-    fetchVol();
-  } else {
-    console.log('watching');
-  }
 
   let showDet = resultShow >= 1;
   let showLoading = showDet ? (
@@ -147,6 +122,27 @@ function App() {
             )}
           </form>
         </div>
+        {arr.push({
+          id: data.items
+            .map((items) => items.id)
+            .join(',')
+            .split(','),
+          author: data.items
+            .map((items) => items.volumeInfo.authors)
+            .join(',')
+            .split(','),
+          title: data.items
+            .map((items) => items.volumeInfo.title)
+            .join(',')
+            .split(','),
+          description: data.items.map((items) => items.volumeInfo.description),
+
+          category: data.items
+            .map((items) => items.volumeInfo.title)
+            .join(',')
+            .split(','),
+        })}
+        {newArr.push(arr)}
         {!isError & !isLoading && (
           <>
             <div className='book-search-section'>
@@ -253,15 +249,50 @@ function App() {
                       color='primary is-light'
                       value={items.id}
                       onClick={(e) => {
-                        setVolumeId(e.target.value);
+                        setVolumeID(e.target.value);
                         fetchVolumeInfo();
-                        console.log('body', volumeId);
+                        let a = arr[0];
+                        let c = a.id.findIndex((i) => i === items.id);
+                        setN(c);
                       }}
                     >
                       {' '}
                       Get More Info
                     </Button>
                     <hr className='hr-book-results' />
+
+                    <div className='more-info-div'>
+                      <div
+                        className={`modal ${
+                          volumeID === items.id ? 'is-active' : null
+                        }`}
+                      >
+                        <div class='modal-background'></div>
+                        <div class='modal-card'>
+                          <header className='modal-card-head'>
+                            <p className='modal-card-title'>
+                              <p>{arr[0].title[n]} </p>
+                            </p>
+                            <button
+                              onClick={() => {
+                                setVolumeID('');
+                              }}
+                              className='delete'
+                              aria-label='close'
+                            ></button>
+                          </header>
+                          <section className='modal-card-body'>
+                            <p>{arr[0].description[n]} </p>
+                          </section>
+                          <footer className='modal-card-foot'>
+                            <button className='button is-success'>
+                              Save changes
+                            </button>
+                            <button className='button'>Cancel</button>
+                          </footer>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </>
               ))}
