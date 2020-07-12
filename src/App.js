@@ -6,14 +6,11 @@ import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components';
 import {
   faHome,
-  faLanguage,
   faBook,
-  faAddressBook,
   faCalendar,
   faFile,
   faUser,
   faBuilding,
-  faTemperatureHigh,
   faAngleDoubleLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import { faTwitter, faGithub } from '@fortawesome/free-brands-svg-icons';
@@ -23,20 +20,20 @@ function App() {
   const [resultShow, setresultShow] = useState(0);
   const [data, setData] = useState({ items: [] });
   const [query, setQuery] = useState('');
-  const [url, setUrl] = useState(
-    `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${process.env.REACT_APP_KEY}`
-  );
+  // const [url, setUrl] = useState(
+  //    `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${process.env.REACT_APP_KEY}`
+  // );
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [countMe, setCountMe] = useState(0);
+  // const [countMe, setCountMe] = useState(0);
   const [volumeId, setVolumeId] = useState('');
   const [volumeData, setVolumeData] = useState({ volumeInfo: {} });
-  const [isLoadingB, setIsLoadingB] = useState(false);
+  // const [isLoadingB, setIsLoadingB] = useState(false);
   const [n, setN] = useState();
   let arr = [];
 
   const [moreN, setMoreN] = useState(0);
-  const [vol, setVol] = useState({});
+  // const [vol, setVol] = useState({});
 
   // const [volumeData, setVolumeData] = useState({volumeInfo:{}})
   const [access, setAccess] = useState({ accessInfo: {} });
@@ -89,9 +86,56 @@ function App() {
   ) : null;
 
   let btnStyle = !showDet ? { margin: '1rem auto' } : { margin: '1rem 0rem' };
+  arr.push({
+    id: data.items
+      .map((items) => items.id)
+      .join(',')
+      .split(','),
+    author: data.items
+      .map((items) => items.volumeInfo.authors)
+      .join(',')
+      .split(','),
+    image: data.items.map((items) =>
+      items.volumeInfo.imageLinks === undefined
+        ? ''
+        : items.volumeInfo.imageLinks.thumbnail
+    ),
+
+    title: data.items
+      .map((items) => items.volumeInfo.title)
+      .join(',')
+      .split(','),
+    subtitle: data.items
+      .map((items) => items.volumeInfo.subtitle)
+      .join(',')
+      .split(','),
+    description: data.items.map((items) => items.volumeInfo.description),
+    category: data.items
+      .map((items) => items.volumeInfo.categories)
+      .join(',')
+      .split(','),
+  });
   return (
     <>
       <div className={resultShow === 0 ? 'dark-bg' : null}>
+        <div className='socials'>
+          <div>
+            <p>
+              <FontAwesomeIcon
+                icon={faGithub}
+                className='socials-icon github'
+              />
+            </p>
+          </div>
+          <div>
+            <p>
+              <FontAwesomeIcon
+                icon={faTwitter}
+                className='socials-icon twitter'
+              />
+            </p>
+          </div>
+        </div>
         <div className={`my-form ${!showDet ? 'not-loading' : 'loaded-res'}`}>
           <form
             onSubmit={(e) => {
@@ -119,15 +163,17 @@ function App() {
               {' '}
               Search
             </Button>
-            {isLoading && (
-              <div className='spinner'>
-                <div className='bounce1'></div>
-                <div className='bounce2'></div>
-                <div className='bounce3'></div>
-              </div>
-            )}
+            {isLoading ? (
+              <>
+                <div className='spinner'>
+                  <div className='bounce1'></div>
+                  <div className='bounce2'></div>
+                  <div className='bounce3'></div>
+                </div>
+              </>
+            ) : null}
 
-            {isError & !isLoading && (
+            {isError & !isLoading ? (
               <>
                 <div className='error-div'>
                   <h3 className='error-text'>
@@ -136,38 +182,11 @@ function App() {
                   </h3>
                 </div>
               </>
-            )}
+            ) : null}
           </form>
         </div>
-        {arr.push({
-          id: data.items
-            .map((items) => items.id)
-            .join(',')
-            .split(','),
-          author: data.items
-            .map((items) => items.volumeInfo.authors)
-            .join(',')
-            .split(','),
-          image: data.items.map(
-            (items) => items.volumeInfo.imageLinks.thumbnail
-          ),
 
-          title: data.items
-            .map((items) => items.volumeInfo.title)
-            .join(',')
-            .split(','),
-          subtitle: data.items
-            .map((items) => items.volumeInfo.subtitle)
-            .join(',')
-            .split(','),
-          description: data.items.map((items) => items.volumeInfo.description),
-          category: data.items
-            .map((items) => items.volumeInfo.categories)
-            .join(',')
-            .split(','),
-        })}
-
-        {!isError & !isLoading && (
+        {!isError & !isLoading ? (
           <>
             <div className='book-search-section'>
               {data.items.map((items) => (
@@ -193,7 +212,7 @@ function App() {
                         />
                       </div>
                       <div className='column icon-section'>
-                        {items.volumeInfo.subtitle && (
+                        {items.volumeInfo.subtitle ? (
                           <>
                             <div>
                               <p>
@@ -206,7 +225,7 @@ function App() {
                               </p>
                             </div>
                           </>
-                        )}
+                        ) : null}
 
                         <p>
                           <FontAwesomeIcon icon={faUser} className='icon' />
@@ -298,12 +317,12 @@ function App() {
                               <p>{arr[0].title[n]} </p>
                             </h2>
                           </header>
-                          <section className='modal-card-body'>
+                          <section className='modal-card-body test-mod'>
                             <div className='columns'>
                               <div className='column image-div'>
                                 <img
                                   src={arr[0].image[n]}
-                                  alt='selected-book'
+                                  alt='selected book img not avaialable'
                                 />
                               </div>
                               <div className='column more-info-sub'>
@@ -389,7 +408,7 @@ function App() {
               ))}
             </div>
           </>
-        )}
+        ) : null}
       </div>
     </>
   );

@@ -7,7 +7,35 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.modal-card-body {
+  background: blue;
+}
 
+.test-mod {
+  line-height: 1.6rem;
+  background: aliceblue !important;
+}
+
+.socials {
+  background: whitesmoke;
+  display: inline-block;
+  position: fixed;
+  right: 0;
+  bottom: 15%;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.twitter:hover,
+.github:hover {
+  opacity: 0.6;
+}
+.twitter {
+  color: dodgerblue;
+  margin-top: 0.5rem;
+}
 .dark-bg {
   background: #0f2027; /* fallback for old browsers */
   background: -webkit-linear-gradient(
@@ -30,6 +58,7 @@ input::placeholder {
 }
 
 .headings h2 {
+  padding: 1rem 2rem;
   text-align: center;
   margin-top: -3rem;
   margin-bottom: 3rem;
