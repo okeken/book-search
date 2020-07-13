@@ -121,18 +121,30 @@ function App() {
         <div className='socials'>
           <div>
             <p>
-              <FontAwesomeIcon
-                icon={faGithub}
-                className='socials-icon github'
-              />
+              <a
+                href='https://github.com/okeken'
+                rel='noopener noreferrer'
+                target='_blank'
+              >
+                <FontAwesomeIcon
+                  icon={faGithub}
+                  className='socials-icon github'
+                />
+              </a>
             </p>
           </div>
           <div>
             <p>
-              <FontAwesomeIcon
-                icon={faTwitter}
-                className='socials-icon twitter'
-              />
+              <a
+                href='https://twitter.com/okekehi'
+                rel='noopener noreferrer'
+                target='_blank'
+              >
+                <FontAwesomeIcon
+                  icon={faTwitter}
+                  className='socials-icon twitter'
+                />
+              </a>
             </p>
           </div>
         </div>
@@ -144,16 +156,25 @@ function App() {
             }}
           >
             <div className='headings'>
-              <h2>Mini Online Book Search</h2>
+              <h2
+                className={`text-headings ${
+                  resultShow === 0 ? 'home-txt-headings' : null
+                }`}
+              >
+                Mini Online Book Search
+              </h2>
             </div>
-            <input
-              type='text'
-              onChange={(e) => {
-                setQuery(e.target.value);
-              }}
-              className='input'
-              placeholder='Search a book'
-            />
+            <div className={resultShow === 0 ? 'input-div' : null}>
+              <input
+                type='text'
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                }}
+                className='input'
+                placeholder='Search a book'
+              />
+            </div>
+
             <Button
               className='btn'
               type='submit'
