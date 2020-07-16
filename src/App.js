@@ -5,7 +5,7 @@ import './index.css';
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components';
 import {
-  faHome,
+
   faBook,
   faCalendar,
   faFile,
@@ -20,22 +20,15 @@ function App() {
   const [resultShow, setresultShow] = useState(0);
   const [data, setData] = useState({ items: [] });
   const [query, setQuery] = useState('');
-  // const [url, setUrl] = useState(
-  //    `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${process.env.REACT_APP_KEY}`
-  // );
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  // const [countMe, setCountMe] = useState(0);
+
   const [volumeId, setVolumeId] = useState('');
   const [volumeData, setVolumeData] = useState({ volumeInfo: {} });
-  // const [isLoadingB, setIsLoadingB] = useState(false);
   const [n, setN] = useState();
   let arr = [];
 
   const [moreN, setMoreN] = useState(0);
-  // const [vol, setVol] = useState({});
-
-  // const [volumeData, setVolumeData] = useState({volumeInfo:{}})
   const [access, setAccess] = useState({ accessInfo: {} });
   const [price, setPrice] = useState({ retailPrice: {} });
   const [othersVol, setOthersVol] = useState('');
@@ -57,7 +50,7 @@ function App() {
     };
     fetchVol();
   } else {
-    console.log('watching');
+    console.log('')
   }
 
   let fetchData = async () => {
