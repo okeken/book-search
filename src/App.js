@@ -4,8 +4,8 @@ import Axios from 'axios';
 import './index.css';
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components';
+import { Canvas } from 'react-canvas-js';
 import {
-
   faBook,
   faCalendar,
   faFile,
@@ -15,6 +15,17 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faTwitter, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+const particles = {
+  maxParticles: 50,
+  colors: ['#2E1D62', '#513D91', '#487EEF', '#11A887', '#fc5c65', '#fed330'],
+  shapes: ['square', 'circle'],
+  size: 10,
+  minSpeed: 0.05,
+  maxSpeed: 0.2,
+  alpha: 0.7,
+  backgroundColor: '#1E1F29',
+};
 
 function App() {
   const [resultShow, setresultShow] = useState(0);
@@ -50,7 +61,7 @@ function App() {
     };
     fetchVol();
   } else {
-    console.log('')
+    console.log('');
   }
 
   let fetchData = async () => {
@@ -110,6 +121,10 @@ function App() {
   });
   return (
     <>
+      <Canvas
+        options={particles}
+        className={resultShow === 0 ? 'particles' : 'hide'}
+      />
       <div className={resultShow === 0 ? 'dark-bg' : null}>
         <div className='socials'>
           <div>
