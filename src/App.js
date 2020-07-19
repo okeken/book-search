@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import Axios from 'axios';
 import './index.css';
+// import Quotes from './quotes';
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components';
 import { Canvas } from 'react-canvas-js';
@@ -125,6 +126,7 @@ function App() {
         options={particles}
         className={resultShow === 0 ? 'particles' : 'hide'}
       />
+      {/* <Quotes /> */}
       <div className={resultShow === 0 ? 'dark-bg' : null}>
         <div className='socials'>
           <div>
@@ -192,6 +194,7 @@ function App() {
               {' '}
               Search
             </Button>
+
             {isLoading ? (
               <>
                 <div className='spinner'>

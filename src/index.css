@@ -8,6 +8,33 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* .quotes {
+  position: fixed;
+  left: 2rem;
+  top: 50%;
+  max-width: 15rem;
+  padding: 0.6rem;
+  line-height: 1.5rem;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-left: 2px solid red;
+} */
+
+.quotes {
+  top: 0;
+  text-align: center;
+  position: fixed;
+  padding: 0.6rem;
+  line-height: 1.5rem;
+  color: white;
+  z-index: 44;
+  background: #2a313391;
+}
+
+.quotes h1 {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
 .particles {
   position: absolute;
   bottom: 0;
@@ -42,6 +69,7 @@ body {
   margin-top: 0.5rem;
 }
 .dark-bg {
+  overflow: hidden;
   background: #0f2027; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to right,
@@ -66,6 +94,8 @@ input::placeholder {
   margin: 0 2rem;
 }
 .text-headings {
+  /* outline:2px solid red; */
+  font-weight: 600;
   text-align: center;
   margin-bottom: 2rem;
   display: flex;
